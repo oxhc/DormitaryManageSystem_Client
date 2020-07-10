@@ -11,7 +11,7 @@
           </div>
           <div>
             <span id="sysname">学生宿舍管理系统</span> <br>
-            <span id="title">管理员登录</span>
+            <span id="title">管理员登录</span> <span @click="$router.push('\stuLogin')" class="toStudent">学生端</span>
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="submitForm('login_form')" type="primary">登录</el-button>
-        <el-button>退出</el-button>
+        <el-button @click="$router.back()">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -103,6 +103,22 @@
 </script>
 
 <style>
+
+  .toStudent {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    padding:1px;
+    border-color: #F7F7F7;
+    color: #F7F7F7;
+  }
+  .toStudent:hover {
+    background-color: white;
+    color: #666;
+    cursor: pointer;
+    opacity: 1;
+  }
   #banner {
     height: 260px;
     background-image: url(assets/login_bg.jpg);
@@ -123,13 +139,13 @@
   }
 
   .balcklayer {
-    animation: turn_to_black 5s;
+    animation: turn_to_black 4s;
     background-color: rgba(47, 65, 85, 0.85);
     height: 100%;
   }
 
   #banner_text {
-    animation: title_fall 5s;
+    animation: title_fall 4s;
     padding-top: 70px;
     margin: 0 auto;
     width: 500px;

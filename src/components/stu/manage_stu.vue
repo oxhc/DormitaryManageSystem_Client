@@ -13,11 +13,11 @@
         <el-button type="primary" @click="refresh" icon="el-icon-search"></el-button>
       </div>
       <div class="search_item">
-        <el-button type="primary" @click="clearCondition" > 清除条件</el-button>
+        <el-button type="primary" @click="clearCondition"> 清除条件</el-button>
       </div>
 
     </div>
-    <el-table :data="tableData"  @row-click="getDetail" style="width: 100%;">
+    <el-table :data="tableData" @row-click="getDetail" style="width: 100%;">
       <el-table-column prop="studentNo" label="学号">
 
       </el-table-column>
@@ -44,7 +44,7 @@
     <Pag @changePage="chagePage($event)" :max="page_count">
 
     </Pag>
-    <el-dialog title="宿舍详情" :visible.sync = "visableDetail">
+    <el-dialog title="宿舍详情" :visible.sync="visableDetail">
       <manageStu :p_dorm_no="detail_dormNo" asComponent v-if="layer == 1 && !asComponent" :layer="layer+1"></manageStu>
     </el-dialog>
 
@@ -56,28 +56,28 @@
   import addStu from './add-stu.vue'
   export default {
     name: 'manageStu',
-    props:{
+    props: {
       p_dorm_no: {
-        type:String,
-        default() {
+        type: String,
+        default () {
           return ''
         }
       },
       p_student: {
-        type:String,
-        default() {
+        type: String,
+        default () {
           return ''
         }
       },
       asComponent: {
-        type:Boolean,
-        default() {
+        type: Boolean,
+        default () {
           return false
         }
       },
       layer: {
-        type:Number,
-        default() {
+        type: Number,
+        default () {
           return 1
         }
       }
@@ -91,7 +91,7 @@
           bedNo: 1,
           password: ''
         }],
-        student_no: '',
+        student_no: this.p_student == '' ? '' : this.p_student,
         student_name: '',
         page: 1,
         limit: 10,
@@ -104,17 +104,18 @@
       }
     },
     created() {
+      console.log("stu created")
       this.refresh()
     },
     watch: {
       p_dorm_no(val) {
         this.dorm_no = val;
         this.refresh()
-        },
-        p_student(val) {
+      },
+      p_student(val) {
         this.student_no = val;
         this.refresh()
-        }
+      }
     },
     methods: {
       refresh() {
@@ -132,13 +133,13 @@
             _this.page_count = parseInt(response.data.total_count / _this.limit) + 1;
           })
       },
-      clearCondition(){
+      clearCondition() {
         this.student_name = ''
         this.student_no = ''
         this.refresh()
       },
       getDetail(row, col) {
-        if("操作" == col.label || this.asComponent) return
+        if ("操作" == col.label || this.asComponent) return
         this.visableDetail = true
         this.detail_dormNo = row.dormNo
       },
@@ -153,7 +154,7 @@
             props: {
               edit: true,
               initstuForm: {
-                studentNo:row.studentNo,
+                studentNo: row.studentNo,
                 name: row.name,
                 dormNo: row.dormNo,
                 bedNo: parseInt(row.bedNo),
@@ -162,8 +163,7 @@
             }
           }),
           beforeClose: (action, instance, done) => {
-            if (action === 'confirm') {
-            } else {
+            if (action === 'confirm') {} else {
               done();
             }
           }
@@ -209,7 +209,6 @@
 </script>
 
 <style>
-
   .search {
     margin: 10px 0;
     display: flex;

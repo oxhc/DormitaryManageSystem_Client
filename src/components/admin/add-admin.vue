@@ -10,7 +10,7 @@
       <el-form-item prop="password" label="密码">
         <el-input type="password" v-model="adminForm.password"></el-input>
       </el-form-item>
-      <el-form-item prop="password" label="密码">
+      <el-form-item  label="级别">
 
         <el-select v-model="adminForm.auLevel" placeholder="请选择">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -37,6 +37,7 @@
             username: '',
             realname: '',
             password: '',
+            auLevel: 0
           }
         }
       },
@@ -49,8 +50,25 @@
       }
     },
     data() {
+      var validatePassword = (rule, value, callback) => {
+        if(!value) {
+          callback(new Error('密码不能为空'))
+        }
+        setTimeout(()=>{
+          if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\s\S]{10,31}$/.test(value)) {
+          callback(new Error('密码10-31个字符，至少1个大写字母，1个小写字母和1个数字'))
+        } else {
+          callback()
+        }
+        }, 2000)
+
+      }
       return {
-        rules: {},
+        rules: {
+          password: [
+            {validator: validatePassword}
+          ]
+        },
         adminForm: this.edit ? this.initadminForm : {
           username: '',
           realname: '',
@@ -95,7 +113,31 @@
           })
       },
       editSubmit() {
-
+        var _this = this
+        var data = {
+          username: this.adminForm.username,
+          password: this.adminForm.password.length==32?this.adminForm.password:this.$md5(this.adminForm.password),
+          auLevel: this.adminForm.auLevel,
+          realname: this.adminForm.realname
+        }
+        console.log(data)
+        this.$http
+          .put('user/admin', _this.Qs.stringify(data))
+          .then(response => {
+            if (response.data) {
+              _this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+            } else {
+              _this.$message({
+                message: '修改失败',
+                type: 'error'
+              });
+            }
+          }).catch(error => {
+            console.log(error)
+          })
       }
 
     }

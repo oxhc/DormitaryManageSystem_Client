@@ -43,7 +43,8 @@
                 <div>
                   提交报修
                 </div>
-                <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea">
+                <el-input maxlength="60"
+  show-word-limit type="textarea" :rows="4" placeholder="请输入内容" v-model="textarea">
                 </el-input>
                 <div style="text-align: right;">
                   <el-button @click="submit" style="margin-top: 4px;" type="success" size="mini">提交</el-button>

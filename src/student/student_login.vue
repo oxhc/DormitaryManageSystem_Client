@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div id="banner">
-      <div class="balcklayer">
+      <div class="sbalcklayer">
         <div id="banner_text">
           <div id="logo">
             <img style="vertical-align: middle;" height="60px" src="../assets/sdut_logo.png">
@@ -12,6 +12,7 @@
           <div>
             <span id="sysname">学生宿舍管理系统</span> <br>
             <span id="title">学生登录</span>
+             <span @click="toAdmin" class="toadmin">管理员端</span>
           </div>
         </div>
       </div>
@@ -25,7 +26,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="submitForm('login_form')" type="primary">登录</el-button>
-        <el-button>退出</el-button>
+        <el-button @click="$refs.login_form.resetFields">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -75,6 +76,9 @@
       };
     },
     methods: {
+      toAdmin() {
+        this.$router.push("/login")
+      },
       submitForm(formName) {
         var _this = this;
         this.$refs[formName].validate((valid) => {
@@ -113,6 +117,24 @@
 </script>
 
 <style>
+  .toadmin {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    padding:1px;
+    border-color: #2B8E74;
+    color: #2B8E74;
+    opacity: 0;
+  }
+  .toadmin:hover {
+    background-color: white;
+    color: #01B487;
+    cursor: pointer;
+    opacity: 1;
+  }
+
+
   #banner {
     height: 260px;
     background-image: url(../assets/login_bg.jpg);
@@ -132,14 +154,14 @@
     font-size: 22px;
   }
 
-  .balcklayer {
-    animation: turn_to_black 5s;
+  .sbalcklayer {
+    animation: sturn_to_black 4s;
     background-color: rgba(33, 140, 116, 0.95);
     height: 100%;
   }
 
   #banner_text {
-    animation: title_fall 5s;
+    animation: title_fall 4s;
     padding-top: 70px;
     margin: 0 auto;
     width: 500px;
@@ -163,7 +185,7 @@
     margin: 0 auto;
   }
 
-  @keyframes turn_to_black {
+  @keyframes sturn_to_black {
     from {
       background: rgba(33, 140, 116, 0.65);
     }
@@ -182,4 +204,5 @@
       padding-top: 70px;
     }
   }
+
 </style>

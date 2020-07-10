@@ -2,8 +2,8 @@
   <div class="home">
     <el-container style="height:100%;">
       <transition name="el-zoom-in-top">
-        <el-aside class="transition-box side" width="200px" v-show="isSideShow">
-          <Nav  v-on:navto="changeTitle($event)" ></Nav>
+        <el-aside  class="transition-box side" :width="isCollapse?'64px':'200px'" v-show="isSideShow">
+          <Nav ref="nav" :collapse="isCollapse"  v-on:navto="changeTitle($event)" ></Nav>
         </el-aside>
       </transition>
       <el-container style="height:100%;">
@@ -50,7 +50,8 @@
         user: {
           username: '未登录',
           realname: '未登录'
-        }
+        },
+        isCollapse:false
       }
     },
 
@@ -62,11 +63,9 @@
     },
     methods: {
       changeSide: function() {
-        if (this.isSideShow) {
-          this.isSideShow = false
-        } else {
-          this.isSideShow = true
-        }
+        console.log("ff")
+        this.isCollapse = !this.isCollapse
+        this.$refs.nav.isCollapse  = this.isCollapse
       },
       changeTitle:function(event) {
         this.active_title = event

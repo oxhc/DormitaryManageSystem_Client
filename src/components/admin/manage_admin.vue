@@ -93,10 +93,10 @@
           message: h('addAdmin', {
             props: {
               edit: true,
-              initdormForm: {
+              initadminForm: {
                 username:row.username,
                 name: row.name,
-                auLevel: row.auLevel,
+                auLevel: parseInt(row.auLevel),
                 realname: row.realname,
                 password: row.password,
               }

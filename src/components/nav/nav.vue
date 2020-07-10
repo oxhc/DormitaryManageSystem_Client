@@ -1,10 +1,15 @@
 <template>
   <div  style="height: 100%;">
 
-    <el-menu @select="select" text-color="#E6F3FB" background-color="#2F4155" :default-active="this.$route.path" style="height:100%; color: #FAFDFF;">
+    <el-menu :collapse="isCollapse"  @select="select" text-color="#E6F3FB" background-color="#2F4155" :default-active="this.$route.path" style="height:100%; color: #FAFDFF;">
       <div class="logo_area">
         <img style="vertical-align: middle;" src="../../assets/sdut_logo.png" height="25px">
-        宿舍管理系统
+        <transition name="el-fade-in-linear">
+               <span v-show="!isCollapse">
+                 宿舍管理系统
+               </span>
+        </transition>
+
       </div>
       <navItem @navto="$emit('navto', $event)"  v-for="(n, index) in nav_data" v-bind:key="index" v-bind:title="n.title" :index="index+1" :sub="n.sub"
         :icon='n.icon'></navItem>
@@ -27,6 +32,7 @@
     },
     data() {
       return {
+        isCollapse: false,
         nav_data: [{
             title: '主页',
             icon: 'el-icon-s-home',
