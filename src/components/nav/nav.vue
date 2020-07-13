@@ -39,9 +39,6 @@
             sub: [{
                 title: '主页',
                 to: '/home'
-              },
-              {
-                title: '个人信息'
               }
             ]
           },
@@ -74,10 +71,7 @@
           {
             title: '报修管理',
             icon: 'el-icon-s-release',
-            sub: [{
-                title: '添加报修',
-                to: '/add_repair'
-              },
+            sub: [
               {
                 title: '报修管理',
                 to: '/manage_repair'

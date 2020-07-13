@@ -66,7 +66,11 @@
 
               </el-table-column>
               <el-table-column prop="note" label="备注">
-
+                <template slot-scope="scope">
+                  <div v-for="item in scope.row.notes" >
+                    {{item}}
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column prop="status" label="状态">
 
@@ -134,6 +138,9 @@
           .get('repair/student')
           .then(function(response) {
             _this.repairForm = response.data.data;
+            _this.repairForm.forEach((item) => {
+              item.notes = item.note.split('\n')
+            })
             _this.page_count = parseInt(response.data.total_count / _this.limit) + 1;
             console.log(_this.page_count)
           })

@@ -2,11 +2,22 @@
   <div class="panel">
     <div class="search">
       <div class="search_item">
-        <div class="label">楼名:</div>
-        <el-input class="si" v-model="build" label="bm"></el-input>
+        <el-switch
+          v-model="displayAll"
+          active-text="全部显示"
+          inactive-text="只显示待处理">
+        </el-switch>
       </div>
       <div class="search_item">
-        <div class="label">宿舍编号:</div>
+        <div class="label">学号:</div>
+        <el-input class="si" v-model="studentNo" label="bm"></el-input>
+      </div>
+      <div class="search_item">
+        <div class="label">楼名:</div>
+        <el-input class="si" v-model="dormName" label="bm"></el-input>
+      </div>
+      <div class="search_item">
+        <div class="label">宿舍:</div>
         <el-input class="si" v-model="room" label="bm"></el-input>
       </div>
       <div class="search_item">
@@ -62,22 +73,20 @@
   export default {
     data() {
       return {
-        tableData: [{
-          rno: '1234',
-          studentNo: '6号公寓',
-          dormNo: '203',
-          size: '',
-          studentCount: 3
-        }],
+        tableData: [],
         build: '1#',
         rno: '',
         page: 1,
         limit: 10,
         end: false,
         room: '',
+        dormName: '',
+        studentNo: '',
         page_count: 1,
         visibleReply: false,
-        current_data: {}
+        current_data: {},
+        dormNo: '',
+        displayAll: true
       }
     },
     created() {
@@ -86,18 +95,48 @@
     methods: {
       refresh() {
         var _this = this
-        this.$http
-          .get('repair?' + _this.Qs.stringify({
-            page: _this.page,
-            limit: _this.limit,
-          }))
-          .then(function(response) {
-            _this.tableData = response.data.data;
-            _this.tableData.forEach((item) => {
-              item.notes = item.note.split('\n')
-            })
-            _this.page_count = parseInt(response.data.total_count / _this.limit) + 1;
+        if(this.dormName != '' && this.room != '') {
+          this.$http.get('dormNo?'+this.Qs.stringify({room:this.room, build: this.dormName}))
+          .then(response => {
+            if(response.data) {
+              this.dormNo = response.data
+              this.$http
+                .get('repair?' + _this.Qs.stringify({
+                  page: _this.page,
+                  limit: _this.limit,
+                  studentNo: _this.studentNo,
+                  dormNo: _this.dormNo,
+                  displayAll: _this.displayAll?'1':'0'
+                }))
+                .then(function(response) {
+                  _this.tableData = response.data.data;
+                  _this.tableData.forEach((item) => {
+                    item.notes = item.note.split('\n')
+                  })
+                  _this.page_count = parseInt(response.data.total_count / _this.limit) + 1;
+                })
+            } else {
+              this.$message.error("宿舍不存在")
+            }
           })
+        } else {
+          this.$http
+            .get('repair?' + _this.Qs.stringify({
+              page: _this.page,
+              limit: _this.limit,
+              studentNo: _this.studentNo,
+              displayAll: _this.displayAll?'1':'0'
+            }))
+            .then(function(response) {
+              _this.tableData = response.data.data;
+              _this.tableData.forEach((item) => {
+                item.notes = item.note.split('\n')
+              })
+              _this.page_count = parseInt(response.data.total_count / _this.limit) + 1;
+            })
+        }
+
+
       },
       openReply(index, row) {
         this.visibleReply = true
@@ -123,8 +162,7 @@
       },
       reply(note, status){
         let time = new Date()
-        if(this.current_data.status != '待处理')
-        this.current_data.note +='\n'+time.toLocaleString()+'反馈:\n'+note+'\n\n';
+        this.current_data.note = this.current_data.note+  '\n'+time.toLocaleString()+'反馈:\n'+note+'\n\n';
         this.current_data.status = status
         this.$http.put('repair', this.Qs.stringify(this.current_data))
         .then(res => {

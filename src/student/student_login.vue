@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="submitForm('login_form')" type="primary">登录</el-button>
-        <el-button @click="$refs.login_form.resetFields">重置</el-button>
+        <el-button @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -78,6 +78,9 @@
     methods: {
       toAdmin() {
         this.$router.push("/login")
+      },
+      reset() {
+        this.$refs.login_form.resetFields()
       },
       submitForm(formName) {
         var _this = this;

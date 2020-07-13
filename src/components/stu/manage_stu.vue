@@ -84,13 +84,7 @@
     },
     data() {
       return {
-        tableData: [{
-          studentNo: '',
-          name: '6',
-          dormNo: '',
-          bedNo: 1,
-          password: ''
-        }],
+        tableData: [],
         student_no: this.p_student == '' ? '' : this.p_student,
         student_name: '',
         page: 1,
@@ -227,5 +221,4 @@
     margin: 0 5px;
   }
 
-  .si {}
 </style>

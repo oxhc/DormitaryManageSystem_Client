@@ -23,8 +23,8 @@
         <el-input type="password" v-model="stuForm.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button :disabled="!dormExist && !edit" @click="addSubmit" v-if="!edit" type="primary">添加</el-button>
-        <el-button :disabled="!dormExist && !edit" @click="editSubmit" v-if="edit" type="primary">确认修改</el-button>
+        <el-button :disabled="!dormExist && !edit" @click="validate(addSubmit)" v-if="!edit" type="primary">添加</el-button>
+        <el-button :disabled="!dormExist && !edit" @click="validate(editSubmit)" v-if="edit" type="primary">确认修改</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -71,7 +71,7 @@
         }
         this.$http.get('existStudent?studentNo='+value)
         .then(res => {
-          if(!res.data) {
+          if(!res.data || this.edit) {
             callback()
           } else {
             callback(new Error('学号已存在'))
@@ -101,6 +101,12 @@
           }
         })
       }
+      var validatePassword = (rule, value, callback) => {
+        if(!(value.length < 6 || value > 25) || this.edit) {
+          callback()
+        }  else
+        callback(new Error('密码长度在6-25位'))
+      }
       return {
         stuForm: this.edit?this.initstuForm: {
           dormNo: '',
@@ -120,7 +126,7 @@
             {validator: validateDormNo, trigger: 'blur'}
           ],
           password: [
-            {min:6, max:25, message: '长度在6到25个字符', trigger:'blur'}
+            {validator:validatePassword, trigger:'blur'}
           ]
         },
         build: '',
@@ -129,6 +135,16 @@
       }
     },
     methods: {
+      validate(func) {
+        this.$refs.stuForm.validate((valid) => {
+          if(valid) {
+            func()
+          } else {
+            this.$message.error("数据不符合要求")
+          }
+
+        })
+      },
       generateDormNo() {
         if(this.room != '' && this.build != '') {
           this.stuForm.dormNo = "获取中..."
@@ -207,13 +223,7 @@
 </script>
 
 <style>
-
-
   #stuForm {
     max-width: 500px;
-  }
-
-  .tag {
-    margin-right: 3px;
   }
 </style>
